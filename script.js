@@ -134,6 +134,8 @@ class IntervalTimer {
     
     start() {
         if (this.isRunning) return;
+        // Always update loopAlert from input field on start
+        this.updateLoopAlert();
         this.isRunning = true;
         this.startBtn.disabled = true;
         this.stopBtn.disabled = false;
