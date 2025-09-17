@@ -5,15 +5,17 @@ class IntervalTimer {
         this.timeLeft = 0;
         this.interval = 5; // default 5 seconds
         this.tickCount = 0;
-        this.audioContext = null;
-        this.volume = 0.5;
-        this.soundType = 'beep';
-        this.customAudioBuffer = null;
-        this.customAudioSource = null;
+    this.audioContext = null;
+    this.volume = 0.5;
+    this.soundType = 'beep';
+    this.customAudioBuffer = null;
+    this.customAudioSource = null;
+    this.loopCount = 0;
+    this.loopAlert = 1;
         
-        this.initializeElements();
-        this.setupEventListeners();
-        this.initializeAudio();
+    this.initializeElements();
+    this.setupEventListeners();
+    this.initializeAudio();
     }
     
     initializeElements() {
@@ -24,6 +26,8 @@ class IntervalTimer {
         this.timeLeftDisplay = document.getElementById('timeLeft');
         this.statusText = document.getElementById('statusText');
         this.tickCountDisplay = document.getElementById('tickCount');
+        this.loopCountDisplay = document.getElementById('loopCount');
+        this.loopAlertInput = document.getElementById('loopAlert');
         this.volumeSlider = document.getElementById('volume');
         this.volumeValue = document.getElementById('volumeValue');
         this.soundTypeSelect = document.getElementById('soundType');
@@ -40,6 +44,17 @@ class IntervalTimer {
         this.volumeSlider.addEventListener('input', () => this.updateVolume());
         this.soundTypeSelect.addEventListener('change', () => this.updateSoundType());
         this.soundFileInput.addEventListener('change', () => this.handleFileUpload());
+        this.loopAlertInput.addEventListener('change', () => this.updateLoopAlert());
+    }
+
+    updateLoopAlert() {
+        const val = parseInt(this.loopAlertInput.value);
+        if (!isNaN(val) && val > 0) {
+            this.loopAlert = val;
+        } else {
+            this.loopAlert = 1;
+            this.loopAlertInput.value = 1;
+        }
     }
     
     initializeAudio() {
@@ -139,6 +154,17 @@ class IntervalTimer {
                 this.playTickSound();
                 this.tickCount++;
                 this.tickCountDisplay.textContent = this.tickCount;
+                // Loop logic: 6 ticks = 1 loop (but not at tick 0)
+                if (this.tickCount > 0 && this.tickCount % 6 === 0) {
+                    this.loopCount++;
+                    this.loopCountDisplay.textContent = this.loopCount;
+                    // If loopCount matches alert setting, play bigger alert and auto-stop
+                    if (this.loopCount > 0 && this.loopCount % this.loopAlert === 0) {
+                        this.playBigAlert();
+                        this.stop();
+                        this.statusText.textContent = `Completed ${this.loopCount} loops. Timer stopped.`;
+                    }
+                }
                 this.timeLeft = this.interval;
             }
         }, 1000);
@@ -160,9 +186,23 @@ class IntervalTimer {
         this.stop();
         this.timeLeft = this.interval;
         this.tickCount = 0;
+        this.loopCount = 0;
         this.tickCountDisplay.textContent = '0';
+        if (this.loopCountDisplay) this.loopCountDisplay.textContent = '0';
         this.statusText.textContent = 'Ready to start';
         this.updateDisplay();
+    }
+
+    playBigAlert() {
+        // Play a bigger alert: e.g., 3 chimes
+        if (!this.audioContext) {
+            this.playFallbackSound();
+            return;
+        }
+        const now = this.audioContext.currentTime;
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => this.playChime(this.audioContext.currentTime), i * 400);
+        }
     }
     
     updateDisplay() {
