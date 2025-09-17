@@ -7,67 +7,122 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="timer-card">
-            <h1>⏰ Interval Timer</h1>
-            <p class="subtitle">Set an interval and get alert sounds</p>
-            
-            <div class="controls">
-                <div class="input-group">
-                    <label for="interval">Interval (seconds):</label>
-                    <input type="number" id="interval" min="1" max="3600" value="5" placeholder="Enter interval">
+    <div class="timers-flex">
+        <div class="container">
+            <div class="timer-card" id="timer1-card">
+                <h1>⏰ Timer 1</h1>
+                <p class="subtitle">Set an interval and get alert sounds</p>
+                <div class="controls">
+                    <div class="input-group">
+                        <label for="interval1">Interval (seconds):</label>
+                        <input type="number" id="interval1" min="1" max="3600" value="5" placeholder="Enter interval">
+                    </div>
+                    <div class="button-group">
+                        <button id="startBtn1" class="btn btn-primary">Start Timer</button>
+                        <button id="stopBtn1" class="btn btn-secondary" disabled>Stop Timer</button>
+                        <button id="resetBtn1" class="btn btn-danger">Reset</button>
+                    </div>
                 </div>
-                
-                <div class="button-group">
-                    <button id="startBtn" class="btn btn-primary">Start Timer</button>
-                    <button id="stopBtn" class="btn btn-secondary" disabled>Stop Timer</button>
-                    <button id="resetBtn" class="btn btn-danger">Reset</button>
+                <div class="status">
+                    <div class="timer-display">
+                        <span id="timeLeft1">00:00</span>
+                    </div>
+                    <div class="status-text">
+                        <span id="statusText1">Ready to start</span>
+                    </div>
+                    <div class="tick-counter">
+                        <span>Ticks: </span><span id="tickCount1">0</span>
+                    </div>
+                    <div class="loop-counter">
+                        <span>Loops: </span><span id="loopCount1">0</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="loopAlert1">Alert after how many loops?</label>
+                        <input type="number" id="loopAlert1" min="1" value="1" style="width: 80px;">
+                    </div>
+                </div>
+                <div class="sound-controls">
+                    <div class="sound-selection">
+                        <label for="soundType1">Alert Sound:</label>
+                        <select id="soundType1">
+                            <option value="beep">Beep</option>
+                            <option value="chime">Chime</option>
+                            <option value="ding">Ding</option>
+                            <option value="tick">Tick</option>
+                            <option value="bell">Bell</option>
+                            <option value="notification">Notification</option>
+                            <option value="custom">Custom Sound</option>
+                        </select>
+                    </div>
+                    <div class="file-upload" id="fileUploadSection1" style="display: none;">
+                        <label for="soundFile1">Upload Sound File:</label>
+                        <input type="file" id="soundFile1" accept="audio/*">
+                        <div class="file-info" id="fileInfo1"></div>
+                    </div>
+                    <div class="volume-control">
+                        <label for="volume1">Volume:</label>
+                        <input type="range" id="volume1" min="0" max="100" value="50">
+                        <span id="volumeValue1">50%</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="status">
-                <div class="timer-display">
-                    <span id="timeLeft">00:00</span>
+        </div>
+        <div class="container">
+            <div class="timer-card" id="timer2-card">
+                <h1>⏰ Timer 2</h1>
+                <p class="subtitle">Set an interval and get alert sounds</p>
+                <div class="controls">
+                    <div class="input-group">
+                        <label for="interval2">Interval (seconds):</label>
+                        <input type="number" id="interval2" min="1" max="3600" value="5" placeholder="Enter interval">
+                    </div>
+                    <div class="button-group">
+                        <button id="startBtn2" class="btn btn-primary">Start Timer</button>
+                        <button id="stopBtn2" class="btn btn-secondary" disabled>Stop Timer</button>
+                        <button id="resetBtn2" class="btn btn-danger">Reset</button>
+                    </div>
                 </div>
-                <div class="status-text">
-                    <span id="statusText">Ready to start</span>
+                <div class="status">
+                    <div class="timer-display">
+                        <span id="timeLeft2">00:00</span>
+                    </div>
+                    <div class="status-text">
+                        <span id="statusText2">Ready to start</span>
+                    </div>
+                    <div class="tick-counter">
+                        <span>Ticks: </span><span id="tickCount2">0</span>
+                    </div>
+                    <div class="loop-counter">
+                        <span>Loops: </span><span id="loopCount2">0</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="loopAlert2">Alert after how many loops?</label>
+                        <input type="number" id="loopAlert2" min="1" value="1" style="width: 80px;">
+                    </div>
                 </div>
-                <div class="tick-counter">
-                    <span>Ticks: </span><span id="tickCount">0</span>
-                </div>
-                <div class="loop-counter">
-                    <span>Loops: </span><span id="loopCount">0</span>
-                </div>
-                <div class="input-group">
-                    <label for="loopAlert">Alert after how many loops?</label>
-                    <input type="number" id="loopAlert" min="1" value="1" style="width: 80px;">
-                </div>
-            </div>
-            
-            <div class="sound-controls">
-                <div class="sound-selection">
-                    <label for="soundType">Alert Sound:</label>
-                    <select id="soundType">
-                        <option value="beep">Beep</option>
-                        <option value="chime">Chime</option>
-                        <option value="ding">Ding</option>
-                        <option value="tick">Tick</option>
-                        <option value="bell">Bell</option>
-                        <option value="notification">Notification</option>
-                        <option value="custom">Custom Sound</option>
-                    </select>
-                </div>
-                
-                <div class="file-upload" id="fileUploadSection" style="display: none;">
-                    <label for="soundFile">Upload Sound File:</label>
-                    <input type="file" id="soundFile" accept="audio/*">
-                    <div class="file-info" id="fileInfo"></div>
-                </div>
-                
-                <div class="volume-control">
-                    <label for="volume">Volume:</label>
-                    <input type="range" id="volume" min="0" max="100" value="50">
-                    <span id="volumeValue">50%</span>
+                <div class="sound-controls">
+                    <div class="sound-selection">
+                        <label for="soundType2">Alert Sound:</label>
+                        <select id="soundType2">
+                            <option value="beep">Beep</option>
+                            <option value="chime">Chime</option>
+                            <option value="ding">Ding</option>
+                            <option value="tick">Tick</option>
+                            <option value="bell">Bell</option>
+                            <option value="notification">Notification</option>
+                            <option value="custom">Custom Sound</option>
+                        </select>
+                    </div>
+                    <div class="file-upload" id="fileUploadSection2" style="display: none;">
+                        <label for="soundFile2">Upload Sound File:</label>
+                        <input type="file" id="soundFile2" accept="audio/*">
+                        <div class="file-info" id="fileInfo2"></div>
+                    </div>
+                    <div class="volume-control">
+                        <label for="volume2">Volume:</label>
+                        <input type="range" id="volume2" min="0" max="100" value="50">
+                        <span id="volumeValue2">50%</span>
+                    </div>
                 </div>
             </div>
         </div>

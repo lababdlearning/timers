@@ -1,3 +1,16 @@
+/* Flex container for two timers side by side */
+.timers-flex {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 40px;
+}
+
+.timers-flex .container {
+    max-width: 480px;
+    min-width: 320px;
+}
 * {
     margin: 0;
     padding: 0;

@@ -1,39 +1,40 @@
 class IntervalTimer {
-    constructor() {
+    constructor(prefix, onAutoStop) {
+        this.prefix = prefix;
         this.timer = null;
         this.isRunning = false;
         this.timeLeft = 0;
         this.interval = 5; // default 5 seconds
         this.tickCount = 0;
-    this.audioContext = null;
-    this.volume = 0.5;
-    this.soundType = 'beep';
-    this.customAudioBuffer = null;
-    this.customAudioSource = null;
-    this.loopCount = 0;
-    this.loopAlert = 1;
-        
-    this.initializeElements();
-    this.setupEventListeners();
-    this.initializeAudio();
+        this.audioContext = null;
+        this.volume = 0.5;
+        this.soundType = 'beep';
+        this.customAudioBuffer = null;
+        this.customAudioSource = null;
+        this.loopCount = 0;
+        this.loopAlert = 1;
+        this.onAutoStop = onAutoStop;
+        this.initializeElements();
+        this.setupEventListeners();
+        this.initializeAudio();
     }
     
     initializeElements() {
-        this.startBtn = document.getElementById('startBtn');
-        this.stopBtn = document.getElementById('stopBtn');
-        this.resetBtn = document.getElementById('resetBtn');
-        this.intervalInput = document.getElementById('interval');
-        this.timeLeftDisplay = document.getElementById('timeLeft');
-        this.statusText = document.getElementById('statusText');
-        this.tickCountDisplay = document.getElementById('tickCount');
-        this.loopCountDisplay = document.getElementById('loopCount');
-        this.loopAlertInput = document.getElementById('loopAlert');
-        this.volumeSlider = document.getElementById('volume');
-        this.volumeValue = document.getElementById('volumeValue');
-        this.soundTypeSelect = document.getElementById('soundType');
-        this.soundFileInput = document.getElementById('soundFile');
-        this.fileUploadSection = document.getElementById('fileUploadSection');
-        this.fileInfo = document.getElementById('fileInfo');
+        this.startBtn = document.getElementById('startBtn' + this.prefix);
+        this.stopBtn = document.getElementById('stopBtn' + this.prefix);
+        this.resetBtn = document.getElementById('resetBtn' + this.prefix);
+        this.intervalInput = document.getElementById('interval' + this.prefix);
+        this.timeLeftDisplay = document.getElementById('timeLeft' + this.prefix);
+        this.statusText = document.getElementById('statusText' + this.prefix);
+        this.tickCountDisplay = document.getElementById('tickCount' + this.prefix);
+        this.loopCountDisplay = document.getElementById('loopCount' + this.prefix);
+        this.loopAlertInput = document.getElementById('loopAlert' + this.prefix);
+        this.volumeSlider = document.getElementById('volume' + this.prefix);
+        this.volumeValue = document.getElementById('volumeValue' + this.prefix);
+        this.soundTypeSelect = document.getElementById('soundType' + this.prefix);
+        this.soundFileInput = document.getElementById('soundFile' + this.prefix);
+        this.fileUploadSection = document.getElementById('fileUploadSection' + this.prefix);
+        this.fileInfo = document.getElementById('fileInfo' + this.prefix);
     }
     
     setupEventListeners() {
@@ -133,23 +134,18 @@ class IntervalTimer {
     
     start() {
         if (this.isRunning) return;
-        
         this.isRunning = true;
         this.startBtn.disabled = true;
         this.stopBtn.disabled = false;
         this.intervalInput.disabled = true;
-        
         if (this.timeLeft === 0) {
             this.timeLeft = this.interval;
         }
-        
         this.statusText.textContent = 'Timer running...';
         this.updateDisplay();
-        
         this.timer = setInterval(() => {
             this.timeLeft--;
             this.updateDisplay();
-            
             if (this.timeLeft <= 0) {
                 this.playTickSound();
                 this.tickCount++;
@@ -163,6 +159,9 @@ class IntervalTimer {
                         this.playBigAlert();
                         this.stop();
                         this.statusText.textContent = `Completed ${this.loopCount} loops. Timer stopped.`;
+                        if (typeof this.onAutoStop === 'function') {
+                            setTimeout(() => this.onAutoStop(), 1000); // start next timer after alert
+                        }
                     }
                 }
                 this.timeLeft = this.interval;
@@ -443,7 +442,9 @@ class IntervalTimer {
     }
 }
 
-// Initialize the timer when the page loads
+// Initialize two timers and chain them
 document.addEventListener('DOMContentLoaded', () => {
-    new IntervalTimer();
+    const timer2 = new IntervalTimer('2');
+    const timer1 = new IntervalTimer('1', () => timer2.start());
+    // Both timers can be started independently by their own Start buttons
 });
