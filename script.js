@@ -13,13 +13,16 @@ class IntervalTimer {
         this.customAudioSource = null;
         this.loopCount = 0;
         this.loopAlert = 1;
-        this.onAutoStop = onAutoStop;
-        this.initializeElements();
-        this.setupEventListeners();
-        this.initializeAudio();
+    this.ticksPerLoop = 6;
+    this.onAutoStop = onAutoStop;
+    this.initializeElements();
+    this.setupEventListeners();
+    this.initializeAudio();
+    this.updateTicksPerLoop();
     }
     
     initializeElements() {
+    this.ticksPerLoopInput = document.getElementById('ticksPerLoop' + this.prefix);
         this.startBtn = document.getElementById('startBtn' + this.prefix);
         this.stopBtn = document.getElementById('stopBtn' + this.prefix);
         this.resetBtn = document.getElementById('resetBtn' + this.prefix);
@@ -38,6 +41,7 @@ class IntervalTimer {
     }
     
     setupEventListeners() {
+        this.ticksPerLoopInput.addEventListener('change', () => this.updateTicksPerLoop());
         this.startBtn.addEventListener('click', () => this.start());
         this.stopBtn.addEventListener('click', () => this.stop());
         this.resetBtn.addEventListener('click', () => this.reset());
@@ -46,6 +50,16 @@ class IntervalTimer {
         this.soundTypeSelect.addEventListener('change', () => this.updateSoundType());
         this.soundFileInput.addEventListener('change', () => this.handleFileUpload());
         this.loopAlertInput.addEventListener('change', () => this.updateLoopAlert());
+    }
+
+    updateTicksPerLoop() {
+        const val = parseInt(this.ticksPerLoopInput.value);
+        if (!isNaN(val) && val > 0) {
+            this.ticksPerLoop = val;
+        } else {
+            this.ticksPerLoop = 1;
+            this.ticksPerLoopInput.value = 1;
+        }
     }
 
     updateLoopAlert() {
@@ -134,8 +148,10 @@ class IntervalTimer {
     
     start() {
         if (this.isRunning) return;
-        // Always update loopAlert from input field on start
+        // Always update loopAlert, ticksPerLoop, and interval from input field on start
         this.updateLoopAlert();
+        this.updateTicksPerLoop();
+        this.updateInterval();
         this.isRunning = true;
         this.startBtn.disabled = true;
         this.stopBtn.disabled = false;
@@ -152,8 +168,8 @@ class IntervalTimer {
                 this.playTickSound();
                 this.tickCount++;
                 this.tickCountDisplay.textContent = this.tickCount;
-                // Loop logic: 6 ticks = 1 loop (but not at tick 0)
-                if (this.tickCount > 0 && this.tickCount % 6 === 0) {
+                // Loop logic: user-defined ticks per loop (but not at tick 0)
+                if (this.tickCount > 0 && this.tickCount % this.ticksPerLoop === 0) {
                     this.loopCount++;
                     this.loopCountDisplay.textContent = this.loopCount;
                     // If loopCount matches alert setting, play bigger alert and auto-stop

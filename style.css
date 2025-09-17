@@ -1,3 +1,59 @@
+.timers-flex {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 40px;
+}
+
+.timers-flex .container {
+    max-width: 480px;
+    min-width: 320px;
+    flex: 1 1 320px;
+}
+
+@media (max-width: 1100px) {
+    .timers-flex {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 900px) {
+    .timers-flex {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+    }
+    .timers-flex .container {
+        max-width: 95vw;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .timer-card {
+        padding: 18px 6px;
+        border-radius: 10px;
+    }
+    h1 {
+        font-size: 1.3rem;
+    }
+    .timer-display {
+        font-size: 2.2rem;
+    }
+    .button-group {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .sound-controls {
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+    .volume-control {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
 /* Flex container for two timers side by side */
 .timers-flex {
     display: flex;
